@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title><%= title %></title>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap -->
+    <link href="/stylesheets/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link rel="stylesheet" type="text/css" href="/stylesheets/add_teacher.css">
+    <style type="text/css">
+    input[type="text"] {
+        margin-left: 42px;
+        width: 585px;
+    }
+    .input-append {
+        margin-top: 10px;
+    }
+    .table {
+    
+        margin-top: 10px;
+        width: 90%;
+        margin: 0 auto;
+        border-top: 1px solid #DEDEDE;
+    }
+    .table tr td{
+        text-align: center;
+        padding: 2px;
+    }
+    #errorTip {
+        margin-left: 17px;
+    }
+    .input_td {
+        width: 80px !important;
+        height: 24px !important;
+        margin-left: 0 !important;
+    }
+    .alert-success {
+        margin-left: 18px;
+    }
+    .course_table {
+        margin-top: 30px;
+    }
+    </style>
+</head>
+<body>
+	
+	<div class="container">
+		<div class="jumbotron">
+			<h1><%= title %></h1>
+			<h3>这里查找课程安排</h3>
+			<hr>
+			<a class="nav_top" href="/"><button type="button" class="btn btn-danger btn-lg"><span class="glyphicon glyphicon-eye-open"></span> 返回主页</button></a>
+			<a class="nav_top" href="/stdscore"><button type="button" class="btn btn-danger btn-lg"><span class="glyphicon glyphicon-th-list"></span>我的课程</button></a>
+            <div class="main-navbar">
+               <ul class="nav-pills">
+                    <li class="nav"><a href="/personal"><%= username %></a></li>
+                    <li class="nav"><a href="/logout">安全退出</a></li>
+                </ul>
+            </div> 
+		</div>
+		<% if (locals.success) { %> 
+        <div id="alt_sucess" class="alert alert-success"> 
+            <%- success %> 
+        </div> 
+       <% } %> 
+
+      <% if (locals.error) { %> 
+        <div id="alt_warning" class="alert alert-warning"> 
+          <%= error %> 
+        </div> 
+      <% } %> 
+
+		<div class="row" id="row">
+			<div class="col-lg-12">
+
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title"><strong>按条件查找课程</strong></h3>
+					</div>
+                    <!-- 内容 -->
+					<div class="panel-body">
+                        <div class="input-append">
+                             <input class="span2" id="appendedInputButtons" type="text" placeholder="根据课程编号查找课程" autofocus>
+                             <button class="btn btn-info btn-large" type="button" id="kcno">课程编号</button>                                             
+                             <button class="btn btn-info btn-large" type="button" id="all">所有课程</button>                            
+                        </div>
+                        <div class="course_table">
+                            <table class="table table-hover table-striped" id="scoretable" style="display: none;">
+                                <thead>
+                                    <tr>          
+                                        <td>课程编号</td>
+                                        <td>课程名</td>
+                                        <td>教师姓名</td>
+                                        <td>教室名</td>
+                                        <td>上课时间</td>
+                                        <td>成绩</td>
+                                    </tr>                        
+                                </thead>
+                                <tbody id="list">                                 
+
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="kc_table">
+                            <table class="table table-hover table-striped" id="kctable" style="display: none;">
+                                <thead>
+                                    <tr>
+                                        <td>课程编号</td>
+                                        <td>课程名</td>
+                                        <td>教师姓名</td>
+                                        <td>教室名</td>
+                                        <td>上课时间</td>
+                                        <td>余量</td>
+                                        <td>操作</td>
+                                    </tr>
+                                </thead>
+                                <tbody id="kc_list">
+                                
+                                </tbody>
+                            </table>
+                        </div>
+					</div>
+				</div>
+
+			</div>			
+		</div>
+        <footer>
+            <p><small>&copy;Copyring All About Gaudi</small></p>
+        </footer>
+	</div>
+
+    <script src="/javascripts/jquery.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="/javascripts/chose.js"></script>
+</body>
+</html>

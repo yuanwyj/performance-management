@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title><%= title %></title>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap -->
+    <link href="/stylesheets/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link rel="stylesheet" type="text/css" href="/stylesheets/add_teacher.css">
+    <style type="text/css">
+        form {
+            width: 80%;
+            margin: 0 auto;
+            margin-top: 37px;
+            margin-bottom: 74px;
+            border: 1px solid #DEDEDE;
+            padding-top: 40px;
+            padding-bottom: 40px;
+        }
+        form .btn {
+            margin-left: 250px;
+        }
+        .alert-warning {
+            margin-left: 18px;
+        }
+    </style>
+</head>
+<body>
+	
+	<div class="container">
+		<div class="jumbotron">
+			<h1><%= title %></h1>
+			<h3>To arrange the course.</h3>
+			<hr>
+			<a class="nav_top" href="/"><button type="button" class="btn btn-danger btn-lg"><span class="glyphicon glyphicon-eye-open"></span> 返回主页</button></a>
+			<a class="nav_top" href="/search_Course"><button type="button" class="btn btn-danger btn-lg"><span class="glyphicon glyphicon-th-list"></span> 查询课程</button></a>
+            <div class="main-navbar">
+               <ul class="nav-pills">
+                    <li class="nav"><a href="#"><%= username %></a></li>
+                    <li class="nav"><a href="/logout">安全退出</a></li>
+                </ul>
+            </div> 
+		</div>
+		<% if (locals.success) { %> 
+        <div id="alt_sucess" class="alert alert-success"> 
+            <%- success %> 
+        </div> 
+       <% } %> 
+
+      <% if (locals.error) { %> 
+        <div id="alt_warning" class="alert alert-warning"> 
+          <%= error %> 
+        </div> 
+      <% } %> 
+		<div class="row" id="row">
+
+			<div class="col-lg-12">
+
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title"><strong>安排课程</strong></h3>
+					</div>
+					<div class="panel-body">
+                        <form method="post" role="form">
+                            <label>课程编号:</label>
+                            <input type="text" name="kcno" id="kcno" autofocus placeholder="eg.001">
+                            <label>教师编号:</label>
+                            <input type="text" name="tno" id="tno" placeholder="eg.04141101">
+                            <label>教室编号:</label>
+                            <input type="text" name="cno" id="cno" placeholder="eg.001">
+                            <label>上课时间:</label>
+                            <input type="text" name="time" id="time" placeholder="eg.周一第一节">
+                            <label>余量&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</label>
+                            <input type="text" name="description" id="description" placeholder="eg.60">
+                            <button type="submit" class="btn btn-primary btn-lg" id="addBtn">安排课程</button>
+                        </form>
+					</div>
+				</div>
+
+			</div>			
+		</div>
+        <footer>
+            <p><small>&copy;Copyring All About Gaudi</small></p>
+        </footer>
+	</div>
+</body>
+</html>
+	<script src="/javascripts/jquery.min.js" type="text/javascript"></script>
+	<script type="text/javascript">
+				
+		String.prototype.format = function (args) {
+            var result = this;
+            if (arguments.length > 0) {
+                if (arguments.length == 1 && typeof (args) == "object") {
+                    for (var key in args) {
+                        if (args[key] != undefined) {
+                            var reg = new RegExp("({" + key + "})", "g");
+                            result = result.replace(reg, args[key]);
+                        }
+                    }
+                }
+                else {
+                    for (var i = 0; i < arguments.length; i++) {
+                        if (arguments[i] != undefined) {
+                            var reg = new RegExp("({)" + i + "(})", "g");
+                            result = result.replace(reg, arguments[i]);
+                        }
+                    }
+                }
+            }
+            return result;
+    }
+
+  $(function(){
+
+        $(addBtn).on('click',function(){
+        
+            var kcno = $("#kcno");
+            var kcnoval = $.trim(kcno.val());
+            var tno = $("#tno");
+            var tnoval = $.trim(tno.val());
+            var cno = $("#cno");
+            var cnoval =$.trim(cno.val());
+            var time = $("#time");
+            var timeval = $.trim(time.val());
+
+            var courseArr = [];
+            courseArr = [kcnoval,tnoval,cnoval,timeval];
+            var JcourseArr = JSON.stringify(courseArr);
+
+            var currentURL = window.location.origin;
+
+            var errorTip = '<div id="errorTip" class="alert alert-warning">{0}</div> ';
+            var row = $("#row");
+            var myreg = /^(((13[0-9]{1})|(15[0-9]{1})|(18[0-9]{1}))+\d{8})$/; 
+
+            var tnoreg = /^\d{8}$/;
+            var kcnoreg = /^\d{3}$/;
+
+
+            $("#errorTip,#alt_warning,#alt_sucess").remove();
+            
+            // 课程编号验证
+            if (!kcnoreg.test(kcnoval)) {
+                row.prepend(errorTip.format('课程编号填写错误'));
+                kcno.focus();
+                return false;
+            } 
+
+            // 教师编号长度验证
+            if (!tnoreg.test(tnoval)) {
+                row.prepend(errorTip.format('教师编号格式填写错误'));
+                tno.focus();
+                return false;
+            }
+
+            // 课室编号验证
+            if (!kcnoreg.test(cnoval)) {
+                row.prepend(errorTip.format('课程编号填写错误'));
+                cno.focus();
+                return false;
+            }
+
+            $.get(currentURL+"/arrangment/find/"+JcourseArr,function(results) {
+                if (results != null) {
+                    row.prepend(errorTip.format('课程冲突'));
+                    return false;                    
+                }
+            });
+
+            return true;
+        })
+    });
+	</script>
+	 
