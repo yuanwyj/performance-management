@@ -1,0 +1,8 @@
+* {
+	margin: 0;
+	padding: 0;
+}
+.page-header {
+	background-color: #555;
+	height: 60px;
+}

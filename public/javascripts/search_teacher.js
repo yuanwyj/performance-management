@@ -29,7 +29,7 @@ date   :2016/9/27
             }
             return result;
         }
-        // 查询老师
+        // 查询所有老师
         $(all).on("click",function(){
             $("#errorTip,#successTip,#alt_error,#alt_success").remove();
             $("#teachertable tbody tr").remove();
@@ -49,7 +49,7 @@ date   :2016/9/27
                 $('#list-' + i).append("<td class='tdval'>" + results[i].E_mail + "</td>");
                 $('#list-' + i).append("<td class='tdval'>" + results[i].tPhone + "</td>");
                 $('#list-' + i).append("<td class='tdval'>" + results[i].tBirthday + "</td>");
-                $('#list-' + i).append("<td><button class='btn change'>修改</button><button class='btn save'>保存</button><button class='btn' id='del'>删除</button></td>");                                                    
+                $('#list-' + i).append("<td><button class='btn change'>修改</button><button class='btn save'>保存</button><button class='btn del'>删除</button></td>");                                                    
                 }  
 
                 $('.change').on("click",function(){
@@ -99,7 +99,24 @@ date   :2016/9/27
                         
                         $("#row").prepend(successTip.format('更新数据成功'));                           
 
-                });                             
+                });  
+                        $('.del').on("click",function(){
+                            if ($('#successTip') != 0) {
+                                $('#successTip').remove();
+                            }
+                            if ($('#errorTip') != 0) {
+                                $('#errorTip').remove();
+                            }
+                            var tnotr = $(this).parent().parent();
+                            var tNo = tnotr.find("td:first-child").text();
+                            tNo = tNo.replace(/\s+/g, '').toLowerCase();
+                            $.post(currentURL + "/search_Teacher/del/" + tNo,function(results){
+                                
+                            });
+                            $("#row").prepend(successTip.format('删除数据成功')); 
+                            tnotr.remove();
+                        });  
+
             });
         });	  
 

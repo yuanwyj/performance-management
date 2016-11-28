@@ -35,7 +35,7 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser('Wilson'));
-app.use(session({ secret: 'keyboard cat', cookie: { maxAge: 660000 }, resave: true, saveUninitialized: true }));
+app.use(session({ secret: 'keyboard cat', cookie: { maxAge: 60*60*24*30 }, resave: true, saveUninitialized: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);

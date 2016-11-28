@@ -55,7 +55,7 @@ $(function(){
 
                             var list = $("<tr>");                           
                             list.addClass('success');
-                            list.attr('id','list-' + i)
+                            list.attr('id','list-' + i);
                             $('#list').append(list);  
                             $('#list-' + i).append("<td>" + results[i].kcNo + "</td>");
                             $('#list-' + i).append("<td>" + results[i].kcName + "</td>");

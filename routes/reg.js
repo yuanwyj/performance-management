@@ -27,16 +27,14 @@ router.post('/', function(req, res) {
   if (isRole == 'teacher') {
   User.getUserNumByName(newUser, function (err, results) {        
              
-      if (results != null && results[0]['num'] > 0) {
-          err = '用户名已存在';
-      }
-
       if (err) {
           res.locals.error = err;
           res.render('reg', { title: TITLE_REG });
           return;
-      } 
-
+      } else {
+          if (results != null && results[0]['num'] > 0) {
+              err = '用户名已存在';
+          }  else {
             User.searchTeacher(newUser.username,function(err,results){
                 if (results !=null && results[0]['num'] > 0) {
                 
@@ -59,21 +57,23 @@ router.post('/', function(req, res) {
                     res.locals.error = err;
                     res.render('reg',{title:TITLE_REG});
                 }
-            });        
+            });               
+          }      
+      }
+
+       
       });
     } else if (isRole == 'student') {
-  User.getUserNumByName(newUser.username, function (err, results) {        
-             
-      if (results != null && results[0]['num'] > 0) {
-          err = '用户名已存在';
-      }
+  User.getUserNumByName(newUser, function (err, results) {        
 
       if (err) {
           res.locals.error = err;
           res.render('reg', { title: TITLE_REG });
           return;
-      } 
-
+      } else {
+          if (results != null && results[0]['num'] > 0) {
+              err = '用户名已存在';
+          } else {
             User.searchStudent(newUser.username,function(err,results){
                 if (results !=null && results[0]['num'] > 0) {
                 
@@ -96,21 +96,28 @@ router.post('/', function(req, res) {
                     res.locals.error = err;
                     res.render('reg',{title:TITLE_REG});
                 }
-            });        
+            });               
+          }       
+      }
+
+       
       });       
     } else {
-         User.getUserNumByName(newUser.username, function (err, results) {        
+        User.getUserNumByName(newUser, function (err, results) {        
              
-      if (results != null && results[0]['num'] > 0) {
-          err = '用户名已存在';
-      }
+
 
       if (err) {
           res.locals.error = err;
           res.render('reg', { title: TITLE_REG });
           return;
-      } 
+      } else {
+          if (results != null && results[0]['num'] > 0) {
+              var  error = '用户名已存在';
+              res.locals.error = error;
+              res.render('reg',{title: TITLE_REG});
 
+          } else {
             User.searchAdm(newUser.username,function(err,results){
                 if (results !=null && results[0]['num'] > 0) {
                 
@@ -133,7 +140,13 @@ router.post('/', function(req, res) {
                     res.locals.error = err;
                     res.render('reg',{title:TITLE_REG});
                 }
-            });        
+            });              
+          }
+
+      
+      }
+
+        
       });
     }  
 });
